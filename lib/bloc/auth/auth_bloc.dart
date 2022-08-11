@@ -40,6 +40,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginEvent>((event, emit) async {
       if (state.runtimeType != NotAuthorizedState) return;
       final state_ = state as NotAuthorizedState;
+      if (state_.authorizationInProgress) {
+        //? return, if request is already started
+        return;
+      }
       emit(state_.copyWith(authorizationInProgress: true));
       try {
         final token = await authRepository.signIn(
@@ -50,7 +54,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } on AuthException catch (authError) {
         final List<AuthException> newErrorsList = List.from(state_.authErrors)
           ..add(authError);
-        emit(state_.copyWith(authErrors: newErrorsList));
+        emit(state_.copyWith(
+          authErrors: newErrorsList,
+          authorizationInProgress: false,
+        ));
       }
     });
   }

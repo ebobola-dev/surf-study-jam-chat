@@ -73,10 +73,23 @@ class _ShowPasswordButtonState extends State<ShowPasswordButton>
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Stack(
+                  alignment: Alignment.center,
                   children: [
                     SvgPicture.asset(
                       'assets/icons/eye.svg',
                       color: Colors.grey,
+                    ),
+                    Transform.rotate(
+                      angle: .5,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        height: 2,
+                        width: authState.showPassword ? 24.0 : 0.0,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(2.0),
+                        ),
+                      ),
                     ),
                   ],
                 ),

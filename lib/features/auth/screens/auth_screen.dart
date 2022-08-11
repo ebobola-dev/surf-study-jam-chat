@@ -7,6 +7,7 @@ import 'package:surf_practice_chat_flutter/bloc/auth/auth_event.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_state.dart';
 import 'package:surf_practice_chat_flutter/features/auth/models/token_dto.dart';
 import 'package:surf_practice_chat_flutter/features/auth/repository/auth_repository.dart';
+import 'package:surf_practice_chat_flutter/features/auth/screens/widgets/loading_banner.dart';
 import 'package:surf_practice_chat_flutter/features/auth/screens/widgets/show_password_button.dart';
 import 'package:surf_practice_chat_flutter/features/chat/repository/chat_repository.dart';
 import 'package:surf_practice_chat_flutter/features/chat/screens/chat_screen.dart';
@@ -47,6 +48,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     final authBloc = context.read<AuthBloc>();
     return MultiBlocListener(
       listeners: [
@@ -89,92 +91,122 @@ class _AuthScreenState extends State<AuthScreen> {
             FocusScope.of(context).requestFocus(FocusNode());
           },
           child: SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(ThemeConfig.defaultPadding),
-                controller: _scrollController,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Image.asset(
-                      'assets/images/chat.png',
-                      width: 140.0,
-                      height: 140.0,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(ThemeConfig.defaultPadding),
+                    controller: _scrollController,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Image.asset(
+                          'assets/images/chat.png',
+                          width: 140.0,
+                          height: 140.0,
+                        ),
+                        const SizedBox(height: 36.0),
+                        Text(
+                          'Wellcome Back!',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
+                        const SizedBox(height: 36.0),
+                        MyTextField(
+                          controller: _loginController,
+                          labelText: 'Введите логин',
+                          onChanged: (newLoginText) =>
+                              authBloc.add(ChangeLoginTextEvent(newLoginText)),
+                          onClearTap: () => authBloc.add(ClearLoginTextEvent()),
+                          onSubmitted: (_) {
+                            FocusScope.of(context)
+                                .requestFocus(_passwordFocusNode);
+                          },
+                        ),
+                        const SizedBox(height: 23.0),
+                        BlocBuilder<AuthBloc, AuthState>(
+                          buildWhen: (previous, current) {
+                            if (previous is NotAuthorizedState &&
+                                current is NotAuthorizedState) {
+                              return previous.showPassword !=
+                                  current.showPassword;
+                            }
+                            return previous.runtimeType != current.runtimeType;
+                          },
+                          builder: (context, authState) {
+                            if (authState.runtimeType != NotAuthorizedState) {
+                              return Container();
+                            }
+                            authState as NotAuthorizedState;
+                            return MyTextField(
+                              controller: _passwordController,
+                              labelText: 'Введите пароль',
+                              onChanged: (newPasswordText) => authBloc.add(
+                                  ChangePasswordTextEvent(newPasswordText)),
+                              onClearTap: () =>
+                                  authBloc.add(ClearPasswordTextEvent()),
+                              focusNode: _passwordFocusNode,
+                              obscureText: !authState.showPassword,
+                              enableSuggestions: false,
+                              autocorrect: false,
+                              suffixWidgets: const [
+                                ShowPasswordButton(),
+                              ],
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 30.0),
+                        BlocBuilder<AuthBloc, AuthState>(
+                          buildWhen: (previous, current) {
+                            if (previous is NotAuthorizedState &&
+                                current is NotAuthorizedState) {
+                              return previous.canLogin != current.canLogin;
+                            }
+                            return previous.runtimeType != current.runtimeType;
+                          },
+                          builder: (context, authState) {
+                            if (authState.runtimeType != NotAuthorizedState) {
+                              return Container();
+                            }
+                            authState as NotAuthorizedState;
+                            return ElevatedButton(
+                              onPressed: authState.canLogin
+                                  ? () => authBloc.add(LoginEvent())
+                                  : null,
+                              child: const Text('Войти'),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 36.0),
-                    Text(
-                      'Wellcome Back!',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline1,
-                    ),
-                    const SizedBox(height: 36.0),
-                    MyTextField(
-                      controller: _loginController,
-                      labelText: 'Введите логин',
-                      onChanged: (newLoginText) =>
-                          authBloc.add(ChangeLoginTextEvent(newLoginText)),
-                      onClearTap: () => authBloc.add(ClearLoginTextEvent()),
-                      onSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_passwordFocusNode);
-                      },
-                    ),
-                    const SizedBox(height: 23.0),
-                    BlocBuilder<AuthBloc, AuthState>(
-                      buildWhen: (previous, current) {
-                        if (previous is NotAuthorizedState &&
-                            current is NotAuthorizedState) {
-                          return previous.showPassword != current.showPassword;
-                        }
-                        return previous.runtimeType != current.runtimeType;
-                      },
-                      builder: (context, authState) {
-                        if (authState.runtimeType != NotAuthorizedState) {
-                          return Container();
-                        }
-                        authState as NotAuthorizedState;
-                        return MyTextField(
-                          controller: _passwordController,
-                          labelText: 'Введите пароль',
-                          onChanged: (newPasswordText) => authBloc
-                              .add(ChangePasswordTextEvent(newPasswordText)),
-                          onClearTap: () =>
-                              authBloc.add(ClearPasswordTextEvent()),
-                          focusNode: _passwordFocusNode,
-                          obscureText: !authState.showPassword,
-                          enableSuggestions: false,
-                          autocorrect: false,
-                          suffixWidgets: const [
-                            ShowPasswordButton(),
-                          ],
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 30.0),
-                    BlocBuilder<AuthBloc, AuthState>(
-                      buildWhen: (previous, current) {
-                        if (previous is NotAuthorizedState &&
-                            current is NotAuthorizedState) {
-                          return previous.canLogin != current.canLogin;
-                        }
-                        return previous.runtimeType != current.runtimeType;
-                      },
-                      builder: (context, authState) {
-                        if (authState.runtimeType != NotAuthorizedState) {
-                          return Container();
-                        }
-                        authState as NotAuthorizedState;
-                        return ElevatedButton(
-                          onPressed: authState.canLogin
-                              ? () => authBloc.add(LoginEvent())
-                              : null,
-                          child: const Text('Войти'),
-                        );
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                BlocBuilder<AuthBloc, AuthState>(
+                  buildWhen: (previous, current) {
+                    if (previous is NotAuthorizedState &&
+                        current is NotAuthorizedState) {
+                      return previous.authorizationInProgress !=
+                          current.authorizationInProgress;
+                    }
+                    return previous.runtimeType != current.runtimeType;
+                  },
+                  builder: (context, authState) {
+                    if (authState.runtimeType != NotAuthorizedState) {
+                      return Container();
+                    }
+                    authState as NotAuthorizedState;
+                    return AnimatedPositioned(
+                      top: authState.authorizationInProgress
+                          ? 0.0
+                          : -screenSize.height,
+                      duration: const Duration(milliseconds: 800),
+                      child: const LoadingBanner(),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
