@@ -25,29 +25,59 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final _scrollController = ScrollController();
+  final _loginController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(ThemeConfig.defaultPadding),
-            controller: _scrollController,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/chat.png',
-                  width: 140.0,
-                  height: 140.0,
-                ),
-                const SizedBox(height: 36.0),
-                Text(
-                  'Wellcome Back!',
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-              ],
+      body: GestureDetector(
+        onTap: () {
+          //* For unfocus textfields on click outside
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(ThemeConfig.defaultPadding),
+              controller: _scrollController,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/chat.png',
+                    width: 140.0,
+                    height: 140.0,
+                  ),
+                  const SizedBox(height: 36.0),
+                  Text(
+                    'Wellcome Back!',
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                  const SizedBox(height: 36.0),
+                  TextField(
+                    controller: _loginController,
+                    style: const TextStyle(
+                      color: ThemeConfig.inputTextColor,
+                      fontSize: 16.0,
+                    ),
+                    decoration: const InputDecoration(
+                      labelText: 'Введите логин',
+                    ),
+                  ),
+                  const SizedBox(height: 23.0),
+                  TextField(
+                    controller: _passwordController,
+                    style: const TextStyle(
+                      color: ThemeConfig.inputTextColor,
+                      fontSize: 16.0,
+                    ),
+                    decoration: const InputDecoration(
+                      labelText: 'Введите пароль',
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

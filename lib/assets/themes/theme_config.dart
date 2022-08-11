@@ -6,6 +6,7 @@ class ThemeConfig {
   static const backgroundColor = Color(0xFFFFFFFF);
   static const textColor1 = Color(0xFF191A23);
   static const textColor2 = Color(0xFF000000);
+  static const inputTextColor = Color(0xFF404040);
   static const iconColor = Color(0xFF191A23); // = TextColor1
   static const buttonColor = Color(0xFF003049);
   static const dividerColor = Color(0xFFEDEDEE);

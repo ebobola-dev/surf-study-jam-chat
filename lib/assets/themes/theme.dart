@@ -46,20 +46,22 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-            primary: ThemeConfig.primaryColor,
-            padding: const EdgeInsets.symmetric(
-              vertical: 18.0,
-              horizontal: 16.0,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            shadowColor: ThemeConfig.primaryColor,
-            textStyle: const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            )),
+          primary: ThemeConfig.primaryColor,
+          padding: const EdgeInsets.symmetric(
+            vertical: 18.0,
+            horizontal: 16.0,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          shadowColor: ThemeConfig.primaryColor,
+          onSurface: Colors.grey,
+          textStyle: const TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+        ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
@@ -73,18 +75,15 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
         secondary: ThemeConfig.secondaryColor,
       ),
       inputDecorationTheme: InputDecorationTheme(
-        labelStyle: TextStyle(
-          color: Colors.black.withOpacity(.7),
+        labelStyle: const TextStyle(
+          color: Color(0xFFB4B4B4),
           fontSize: 17.0,
         ),
-        errorStyle: const TextStyle(
-          fontSize: 12.0,
-        ),
         filled: true,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+        fillColor: const Color(0xFFF8F8F8),
+        contentPadding: const EdgeInsets.fromLTRB(16.0, 18.0, 10.0, 18.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(12.0),
           borderSide: BorderSide.none,
         ),
       ),
