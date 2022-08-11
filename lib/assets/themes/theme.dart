@@ -37,6 +37,7 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
       ).apply(
         fontFamily: ThemeConfig.font,
         bodyColor: ThemeConfig.textColor1,
+        displayColor: ThemeConfig.textColor1,
       ),
       appBarTheme: const AppBarTheme(
         centerTitle: true,
