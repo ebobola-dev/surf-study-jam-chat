@@ -45,16 +45,20 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          primary: ThemeConfig.primaryColor,
-          padding: const EdgeInsets.symmetric(
-            vertical: 10.0,
-            horizontal: 10.0,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          shadowColor: ThemeConfig.primaryColor,
-        ),
+            primary: ThemeConfig.primaryColor,
+            padding: const EdgeInsets.symmetric(
+              vertical: 18.0,
+              horizontal: 16.0,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            shadowColor: ThemeConfig.primaryColor,
+            textStyle: const TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            )),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(

@@ -23,10 +23,24 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  // TODO(task): Implement Auth screen.
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/chat.png',
+                width: 90.0,
+                height: 90.0,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _pushToChat(BuildContext context, TokenDto token) {
