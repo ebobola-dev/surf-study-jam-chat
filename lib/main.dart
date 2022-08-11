@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:surf_practice_chat_flutter/assets/themes/theme.dart';
+import 'package:surf_practice_chat_flutter/bloc/auth/auth_bloc.dart';
 import 'package:surf_practice_chat_flutter/features/auth/repository/auth_repository.dart';
 import 'package:surf_practice_chat_flutter/features/auth/screens/auth_screen.dart';
 import 'package:surf_study_jam/surf_study_jam.dart';
@@ -15,12 +17,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Chat App',
-      debugShowCheckedModeBanner: false,
-      theme: getThemeData(context),
-      home: AuthScreen(
-        authRepository: AuthRepository(StudyJamClient()),
+    final authRepository = AuthRepository(StudyJamClient());
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthBloc(authRepository: authRepository),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Chat App',
+        debugShowCheckedModeBanner: false,
+        theme: getThemeData(context),
+        home: const AuthScreen(),
       ),
     );
   }
