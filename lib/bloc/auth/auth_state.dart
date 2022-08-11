@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:surf_practice_chat_flutter/features/auth/exceptions/auth_exception.dart';
 import 'package:surf_practice_chat_flutter/features/auth/models/token_dto.dart';
 
 abstract class AuthState extends Equatable {}
@@ -6,7 +7,7 @@ abstract class AuthState extends Equatable {}
 class NotAuthorizedState extends AuthState {
   final String loginTextInput;
   final String passwordTextInput;
-  final List<String> authErrors;
+  final List<AuthException> authErrors;
   final bool showPassword;
   final bool authorizationInProgress;
 
@@ -33,7 +34,7 @@ class NotAuthorizedState extends AuthState {
   NotAuthorizedState copyWith({
     String? loginTextInput,
     String? passwordTextInput,
-    List<String>? authErrors,
+    List<AuthException>? authErrors,
     bool? showPassword,
     bool? authorizationInProgress,
   }) =>

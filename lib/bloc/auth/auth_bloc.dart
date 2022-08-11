@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_event.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_state.dart';
+import 'package:surf_practice_chat_flutter/features/auth/exceptions/auth_exception.dart';
 import 'package:surf_practice_chat_flutter/features/auth/repository/auth_repository.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -46,9 +47,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           password: state_.passwordTextInput,
         );
         emit(AuthorizedState(token: token));
-      } catch (authError) {
-        final List<String> newErrorsList = List.from(state_.authErrors)
-          ..add(authError.toString());
+      } on AuthException catch (authError) {
+        final List<AuthException> newErrorsList = List.from(state_.authErrors)
+          ..add(authError);
         emit(state_.copyWith(authErrors: newErrorsList));
       }
     });

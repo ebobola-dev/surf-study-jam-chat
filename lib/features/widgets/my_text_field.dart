@@ -10,6 +10,10 @@ class MyTextField extends StatefulWidget {
   final VoidCallback? onClearTap;
   final void Function(String)? onSubmitted;
   final void Function(String)? onChanged;
+  final List<Widget> suffixWidgets;
+  final bool obscureText;
+  final bool enableSuggestions;
+  final bool autocorrect;
   const MyTextField({
     Key? key,
     this.textStyle = const TextStyle(
@@ -22,6 +26,10 @@ class MyTextField extends StatefulWidget {
     this.onClearTap,
     this.onSubmitted,
     this.onChanged,
+    this.suffixWidgets = const [],
+    this.obscureText = false,
+    this.enableSuggestions = true,
+    this.autocorrect = true,
   }) : super(key: key);
 
   @override
@@ -35,14 +43,18 @@ class _MyTextFieldState extends State<MyTextField> {
   void initState() {
     widget.controller.addListener(() {
       if (widget.controller.text.isEmpty && showClearButton) {
-        setState(() {
-          showClearButton = false;
-        });
+        if (mounted) {
+          setState(() {
+            showClearButton = false;
+          });
+        }
       }
       if (widget.controller.text.isNotEmpty && !showClearButton) {
-        setState(() {
-          showClearButton = true;
-        });
+        if (mounted) {
+          setState(() {
+            showClearButton = true;
+          });
+        }
       }
     });
     super.initState();
@@ -56,32 +68,41 @@ class _MyTextFieldState extends State<MyTextField> {
       style: widget.textStyle,
       onSubmitted: widget.onSubmitted,
       onChanged: widget.onChanged,
+      obscureText: widget.obscureText,
+      enableSuggestions: widget.enableSuggestions,
+      autocorrect: widget.autocorrect,
       decoration: InputDecoration(
         labelText: widget.labelText,
-        suffixIcon: AnimatedOpacity(
-          duration: const Duration(milliseconds: 300),
-          opacity: showClearButton ? 1.0 : 0.0,
-          child: Material(
-            borderRadius: BorderRadius.circular(50.0),
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(50.0),
-              onTap: () {
-                widget.controller.clear();
-                if (widget.onClearTap != null) {
-                  widget.onClearTap!();
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SvgPicture.asset(
-                  'assets/icons/cross.svg',
-                  color: Colors.grey,
-                  height: 14.0,
+        suffixIcon: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ...widget.suffixWidgets,
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: showClearButton ? 1.0 : 0.0,
+              child: Material(
+                borderRadius: BorderRadius.circular(50.0),
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(50.0),
+                  onTap: () {
+                    widget.controller.clear();
+                    if (widget.onClearTap != null) {
+                      widget.onClearTap!();
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SvgPicture.asset(
+                      'assets/icons/cross.svg',
+                      color: Colors.grey,
+                      height: 14.0,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

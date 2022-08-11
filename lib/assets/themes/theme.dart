@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:surf_practice_chat_flutter/assets/themes/theme_config.dart';
+import 'package:surf_practice_chat_flutter/features/models/snack_type.dart';
 
 ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
       primaryColor: ThemeConfig.primaryColor,
@@ -85,6 +86,14 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.0),
           borderSide: BorderSide.none,
+        ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: ThemeConfig.snackColors[SnackType.simple]!,
+        contentTextStyle: const TextStyle(
+          fontSize: 18.0,
+          fontFamily: ThemeConfig.font,
+          color: ThemeConfig.textColor1,
         ),
       ),
       // dialogBackgroundColor: ThemeConfig.backgroundColor,
