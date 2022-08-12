@@ -45,6 +45,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(state_.copyWith(showPassword: !state_.showPassword));
     });
 
+    on<LogoutEvent>((event, emit) async {
+      if (state.runtimeType != AuthorizedState) return;
+      await _secureStorage.delete(key: _secureStorageKey);
+      emit(NotAuthorizedState());
+    });
+
     on<LoginEvent>((event, emit) async {
       if (state.runtimeType != NotAuthorizedState) return;
       final state_ = state as NotAuthorizedState;

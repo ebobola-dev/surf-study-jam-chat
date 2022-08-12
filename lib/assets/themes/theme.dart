@@ -119,6 +119,10 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
           borderRadius: BorderRadius.all(Radius.circular(12.0)),
         ),
       ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: ThemeConfig.secondaryColor,
+        foregroundColor: Colors.white,
+      ),
       // bottomSheetTheme: BottomSheetThemeData(
       //   backgroundColor: Colors.transparent,
       //   shape: RoundedRectangleBorder(

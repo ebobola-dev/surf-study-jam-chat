@@ -28,3 +28,5 @@ class ClearPasswordTextEvent extends AuthEvent {}
 class TogglePasswordDisplayEvent extends AuthEvent {}
 
 class LoginEvent extends AuthEvent {}
+
+class LogoutEvent extends AuthEvent {}

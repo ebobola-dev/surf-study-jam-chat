@@ -15,7 +15,6 @@ class ShowPasswordButton extends StatefulWidget {
 class _ShowPasswordButtonState extends State<ShowPasswordButton>
     with SingleTickerProviderStateMixin {
   late final AnimationController _lineController;
-  late final Animation<double> _lineAnimation;
 
   @override
   void initState() {
@@ -23,10 +22,6 @@ class _ShowPasswordButtonState extends State<ShowPasswordButton>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    _lineAnimation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      parent: _lineController,
-      curve: Curves.decelerate,
-    ));
     final authState = context.read<AuthBloc>().state;
     if (authState is NotAuthorizedState &&
         authState.showPassword &&
@@ -68,6 +63,7 @@ class _ShowPasswordButtonState extends State<ShowPasswordButton>
             child: InkWell(
               borderRadius: BorderRadius.circular(50.0),
               onTap: () {
+                if (authState.passwordTextInput.isEmpty) return;
                 authBloc.add(TogglePasswordDisplayEvent());
               },
               child: Padding(
