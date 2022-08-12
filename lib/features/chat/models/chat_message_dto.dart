@@ -20,6 +20,8 @@ class ChatMessageDto extends Equatable {
   final ChatGeolocationDto? location;
   final List<String>? imageUrls;
 
+  bool get hasUserName => chatUserDto.name != null;
+  bool get hasAvatar => chatUserDto.avatar != null;
   bool get hasMessage => message != null && message!.isNotEmpty;
   bool get hasLocation => location != null;
   bool get hasImages => imageUrls != null && imageUrls!.isNotEmpty;

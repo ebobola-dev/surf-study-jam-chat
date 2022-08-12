@@ -74,6 +74,7 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           textStyle: const TextStyle(
             color: ThemeConfig.primaryColor,
             fontFamily: ThemeConfig.font,
@@ -110,14 +111,14 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
         color: Color(0xFFF8F8F8),
         elevation: 0,
       ),
-      // dialogBackgroundColor: ThemeConfig.backgroundColor,
-      // dialogTheme: const DialogTheme(
-      //   alignment: Alignment.center,
-      //   elevation: 5,
-      //   shape: RoundedRectangleBorder(
-      //     borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      //   ),
-      // ),
+      dialogBackgroundColor: ThemeConfig.backgroundColor,
+      dialogTheme: const DialogTheme(
+        alignment: Alignment.center,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+        ),
+      ),
       // bottomSheetTheme: BottomSheetThemeData(
       //   backgroundColor: Colors.transparent,
       //   shape: RoundedRectangleBorder(

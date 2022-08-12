@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,6 +6,7 @@ import 'package:surf_practice_chat_flutter/assets/themes/theme_config.dart';
 import 'package:surf_practice_chat_flutter/bloc/chat/chat_bloc.dart';
 import 'package:surf_practice_chat_flutter/bloc/chat/chat_event.dart';
 import 'package:surf_practice_chat_flutter/bloc/chat/chat_state.dart';
+import 'package:surf_practice_chat_flutter/features/chat/widgets/attach_dialog.dart';
 import 'package:surf_practice_chat_flutter/features/widgets/my_text_field.dart';
 
 class InputMessage extends StatefulWidget {
@@ -41,14 +43,24 @@ class _InputMessageState extends State<InputMessage> {
       ),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () {},
-            splashRadius: 24,
-            icon: SvgPicture.asset(
-              'assets/icons/attach-file.svg',
-              color: Colors.grey,
-            ),
-          ),
+          BlocBuilder<ChatBloc, ChatState>(
+              buildWhen: (previous, current) =>
+                  previous.attachedCount != current.attachedCount,
+              builder: (context, chatState) {
+                return Badge(
+                  showBadge: chatState.attachedCount != 0,
+                  badgeColor: Theme.of(context).secondaryHeaderColor,
+                  position: BadgePosition.topEnd(end: -5),
+                  badgeContent: Text(chatState.attachedCount.toString()),
+                  child: IconButton(
+                    onPressed: () => _showAttachDialog(context),
+                    splashRadius: 24,
+                    icon: SvgPicture.asset(
+                      'assets/icons/attach.svg',
+                    ),
+                  ),
+                );
+              }),
           const SizedBox(width: ThemeConfig.defaultPadding / 2),
           Flexible(
             child: MyTextField(
@@ -81,6 +93,22 @@ class _InputMessageState extends State<InputMessage> {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  void _showAttachDialog(BuildContext context) {
+    final chatBloc = context.read<ChatBloc>();
+    showDialog(
+      context: context,
+      builder: (context) => AttachDialog(
+        chatState: chatBloc.state,
+        onAttachGeo: (geo) => chatBloc.add(AttachGeolocation(geo)),
+        onAttachImage: (image) => chatBloc.add(AttachImage(image)),
+        onDetachGeo: () => chatBloc.add(DetachGeolocation()),
+        onDetachImage: (imageUrl) => chatBloc.add(DetachImage(imageUrl)),
+        onDetachAllImages: () => chatBloc.add(DetachAllImages()),
+        onDetachAll: () => chatBloc.add(DetachAll()),
       ),
     );
   }

@@ -19,6 +19,7 @@ class MessageList extends StatefulWidget {
 class _MessageListState extends State<MessageList> {
   final _scrollController = ScrollController();
   bool _showScrollButton = false;
+  bool _weAreDown = false;
   Timer? _scrollTimer;
 
   @override
@@ -28,6 +29,9 @@ class _MessageListState extends State<MessageList> {
         bool isTop = _scrollController.position.pixels == 0;
         //* isTop is True => we are at the top
         //* isTop is False => we are down
+        setState(() {
+          _weAreDown = !isTop;
+        });
         if (!isTop && _showScrollButton) {
           setState(() {
             _showScrollButton = false;
@@ -58,9 +62,12 @@ class _MessageListState extends State<MessageList> {
               onNotification: (notification) {
                 final direction = notification.direction;
                 setState(() {
-                  if (direction == ScrollDirection.reverse) {
+                  if (direction == ScrollDirection.reverse && !_weAreDown) {
                     _showScrollButton = true;
                   } else if (direction == ScrollDirection.forward) {
+                    setState(() {
+                      _weAreDown = false;
+                    });
                     _showScrollButton = false;
                   }
                 });

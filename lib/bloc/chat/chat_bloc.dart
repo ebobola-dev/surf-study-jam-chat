@@ -16,6 +16,51 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       emit(state.copyWith(messageField: ''));
     });
 
+    on<AttachImage>((event, emit) {
+      if (state.attachedImages.map((i) => i).contains(event.newImageUrl)) {
+        //* return, if image already attached
+        return;
+      }
+      final newImageList = List<String>.from(state.attachedImages)
+        ..add(event.newImageUrl);
+      emit(state.copyWith(attachedImages: newImageList));
+    });
+
+    on<DetachImage>((event, emit) {
+      emit(state.copyWith(
+        attachedImages:
+            state.attachedImages.where((i) => i != event.imagePath).toList(),
+      ));
+    });
+
+    on<DetachAllImages>((event, emit) {
+      emit(state.copyWith(
+        attachedImages: const [],
+      ));
+    });
+
+    on<AttachGeolocation>((event, emit) {
+      emit(state.copyWith(
+        attachedGeolocation: event.geolocation,
+        changeAttachedGeolocation: true,
+      ));
+    });
+
+    on<DetachGeolocation>((event, emit) {
+      emit(state.copyWith(
+        attachedGeolocation: null,
+        changeAttachedGeolocation: true,
+      ));
+    });
+
+    on<DetachAll>((event, emit) {
+      emit(state.copyWith(
+        attachedImages: const [],
+        attachedGeolocation: null,
+        changeAttachedGeolocation: true,
+      ));
+    });
+
     on<UpdateMessagesEvent>((event, emit) async {
       if (state.updating) {
         //? return if request already started
@@ -44,9 +89,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     on<SendMessageEvent>((event, emit) async {
       try {
-        final messages = await chatRepository.sendMessage(state.messageField);
+        final messages = await chatRepository.sendMessage(
+          message: state.messageField,
+          location: state.attachedGeolocation,
+          imageUrls: state.imagesAttached ? state.attachedImages : null,
+        );
         emit(state.copyWith(
           messages: messages,
+          attachedGeolocation: null,
+          attachedImages: const [],
+          changeAttachedGeolocation: true,
         ));
       } catch (err) {
         log('Bloc: error on send message: $err');
