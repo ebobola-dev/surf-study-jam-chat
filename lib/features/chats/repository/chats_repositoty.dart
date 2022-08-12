@@ -4,7 +4,11 @@ import 'package:surf_study_jam/surf_study_jam.dart';
 abstract class IChatsRepository {
   static const int maxMessageLength = 300;
 
-  Future<Iterable<Chat>> createChat(Chat chat);
+  Future<Iterable<Chat>> createChat({
+    String? name,
+    String? description,
+    String? avatar,
+  });
 
   Future<Iterable<Chat>> getChats();
 }
@@ -15,12 +19,16 @@ class ChatsRepository implements IChatsRepository {
   ChatsRepository(this._studyJamClient);
 
   @override
-  Future<Iterable<Chat>> createChat(Chat chat) async {
+  Future<Iterable<Chat>> createChat({
+    String? name,
+    String? description,
+    String? avatar,
+  }) async {
     try {
       await _studyJamClient.createChat(SjChatSendsDto(
-        name: chat.name,
-        description: chat.description,
-        avatar: chat.avatar,
+        name: name,
+        description: description,
+        avatar: avatar,
       ));
       final chats = await _fetchAllChats();
       return chats;

@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:surf_practice_chat_flutter/bloc/chats/chats_event.dart';
 import 'package:surf_practice_chat_flutter/bloc/chats/chats_state.dart';
-import 'package:surf_practice_chat_flutter/features/chats/models/chat.dart';
 import 'package:surf_practice_chat_flutter/features/chats/repository/chats_repositoty.dart';
 
 class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
@@ -36,11 +35,11 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
         changeError: true,
       ));
       try {
-        final chats = await chatsRepository.createChat(Chat(
+        final chats = await chatsRepository.createChat(
           name: event.name,
           description: event.descriprion,
           avatar: event.avatar,
-        ));
+        );
         emit(state.copyWith(
           chats: chats,
           updating: false,
