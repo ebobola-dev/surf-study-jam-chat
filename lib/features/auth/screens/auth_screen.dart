@@ -5,14 +5,14 @@ import 'package:surf_practice_chat_flutter/assets/themes/theme_config.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_bloc.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_event.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_state.dart';
-import 'package:surf_practice_chat_flutter/bloc/chat/chat_bloc.dart';
-import 'package:surf_practice_chat_flutter/bloc/chat/chat_event.dart';
+import 'package:surf_practice_chat_flutter/bloc/chats/chats_bloc.dart';
+import 'package:surf_practice_chat_flutter/bloc/chats/chats_event.dart';
 import 'package:surf_practice_chat_flutter/features/auth/models/token_dto.dart';
 import 'package:surf_practice_chat_flutter/features/auth/repository/auth_repository.dart';
 import 'package:surf_practice_chat_flutter/features/auth/widgets/loading_banner.dart';
 import 'package:surf_practice_chat_flutter/features/auth/widgets/show_password_button.dart';
-import 'package:surf_practice_chat_flutter/features/chat/repository/chat_repository.dart';
-import 'package:surf_practice_chat_flutter/features/chat/screens/chat_screen.dart';
+import 'package:surf_practice_chat_flutter/features/chats/repository/chats_repositoty.dart';
+import 'package:surf_practice_chat_flutter/features/chats/screens/chats_screen.dart';
 import 'package:surf_practice_chat_flutter/features/models/snack_type.dart';
 import 'package:surf_practice_chat_flutter/features/widgets/my_text_field.dart';
 import 'package:surf_practice_chat_flutter/utils/animated_swtich_page.dart';
@@ -221,12 +221,12 @@ class _AuthScreenState extends State<AuthScreen> {
     animatedSwitchPage(
       context,
       BlocProvider(
-        create: (context) => ChatBloc(
-          chatRepository: ChatRepository(
+        create: (context) => ChatsBloc(
+          chatsRepository: ChatsRepository(
             StudyJamClient().getAuthorizedClient(token.token),
           ),
-        )..add(UpdateMessagesEvent()),
-        child: const ChatScreen(),
+        )..add(UpdateChatsEvent()),
+        child: const ChatsScreen(),
       ),
       routeAnimation: RouteAnimation.slideLeft,
       clearNavigator: true,

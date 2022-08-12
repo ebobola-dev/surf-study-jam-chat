@@ -88,6 +88,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
 
     on<SendMessageEvent>((event, emit) async {
+      emit(state.copyWith(
+        updating: true,
+        error: null,
+        changeError: true,
+      ));
       try {
         final messages = await chatRepository.sendMessage(
           message: state.messageField,
@@ -99,6 +104,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           attachedGeolocation: null,
           attachedImages: const [],
           changeAttachedGeolocation: true,
+          updating: false,
         ));
       } catch (err) {
         log('Bloc: error on send message: $err');
