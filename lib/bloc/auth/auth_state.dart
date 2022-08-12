@@ -1,29 +1,30 @@
 import 'package:equatable/equatable.dart';
 import 'package:surf_practice_chat_flutter/features/auth/exceptions/auth_exception.dart';
 import 'package:surf_practice_chat_flutter/features/auth/models/token_dto.dart';
+import 'package:surf_study_jam/surf_study_jam.dart';
 
 abstract class AuthState extends Equatable {}
 
 class NotAuthorizedState extends AuthState {
   final String loginTextInput;
   final String passwordTextInput;
-  final List<AuthException> authErrors;
+  final AuthException? authError;
   final bool showPassword;
   final bool authorizationInProgress;
 
   NotAuthorizedState({
+    this.authError,
     this.loginTextInput = '',
     this.passwordTextInput = '',
-    this.authErrors = const [],
     this.showPassword = false,
     this.authorizationInProgress = false,
   });
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         loginTextInput,
         passwordTextInput,
-        authErrors,
+        authError,
         showPassword,
         authorizationInProgress,
       ];
@@ -34,14 +35,15 @@ class NotAuthorizedState extends AuthState {
   NotAuthorizedState copyWith({
     String? loginTextInput,
     String? passwordTextInput,
-    List<AuthException>? authErrors,
     bool? showPassword,
     bool? authorizationInProgress,
+    AuthException? authError,
+    bool changeError = false,
   }) =>
       NotAuthorizedState(
         loginTextInput: loginTextInput ?? this.loginTextInput,
         passwordTextInput: passwordTextInput ?? this.passwordTextInput,
-        authErrors: authErrors ?? this.authErrors,
+        authError: changeError ? authError : this.authError,
         showPassword: showPassword ?? this.showPassword,
         authorizationInProgress:
             authorizationInProgress ?? this.authorizationInProgress,
@@ -50,11 +52,13 @@ class NotAuthorizedState extends AuthState {
 
 class AuthorizedState extends AuthState {
   final TokenDto token;
+  final SjUserDto? me;
 
   AuthorizedState({
     required this.token,
+    required this.me,
   });
 
   @override
-  List<Object> get props => [token];
+  List<Object?> get props => [token, me];
 }

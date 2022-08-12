@@ -27,9 +27,9 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
           fontWeight: FontWeight.w500,
         ), //* Header titles
         headline5: TextStyle(
-          fontSize: 16.0,
-          fontWeight: FontWeight.w400,
-        ),
+          fontSize: 14.0,
+          fontWeight: FontWeight.w500,
+        ), //* Messages text
         headline6: TextStyle(
           fontSize: 12.0,
           fontWeight: FontWeight.w400,
@@ -42,8 +42,15 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
       ),
       appBarTheme: const AppBarTheme(
         centerTitle: true,
-        color: ThemeConfig.secondaryColor,
+        color: Colors.transparent,
+        elevation: 0,
         iconTheme: IconThemeData(color: ThemeConfig.iconColor),
+        titleTextStyle: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w500,
+          color: ThemeConfig.textColor1,
+          fontFamily: ThemeConfig.font,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -61,6 +68,7 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
             fontSize: 16.0,
             fontWeight: FontWeight.w500,
             color: Colors.white,
+            fontFamily: ThemeConfig.font,
           ),
         ),
       ),
@@ -68,6 +76,7 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
         style: TextButton.styleFrom(
           textStyle: const TextStyle(
             color: ThemeConfig.primaryColor,
+            fontFamily: ThemeConfig.font,
           ),
         ),
       ),
@@ -79,6 +88,7 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
         labelStyle: const TextStyle(
           color: Color(0xFFB4B4B4),
           fontSize: 17.0,
+          fontFamily: ThemeConfig.font,
         ),
         filled: true,
         fillColor: const Color(0xFFF8F8F8),
@@ -95,6 +105,10 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
           fontFamily: ThemeConfig.font,
           color: ThemeConfig.textColor1,
         ),
+      ),
+      cardTheme: const CardTheme(
+        color: Color(0xFFF8F8F8),
+        elevation: 0,
       ),
       // dialogBackgroundColor: ThemeConfig.backgroundColor,
       // dialogTheme: const DialogTheme(

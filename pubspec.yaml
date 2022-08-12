@@ -17,6 +17,10 @@ dependencies:
   equatable: ^2.0.3
   flutter_bloc: ^8.0.1
   get: ^4.6.5
+  intl: ^0.17.0
+  geolocator: ^8.2.1
+  image_picker: ^0.8.5+3
+  url_launcher: ^6.1.5
 
 dev_dependencies:
   flutter_test:
@@ -31,7 +35,6 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
-    - assets/lottie/
 
   fonts:
     - family: Inter

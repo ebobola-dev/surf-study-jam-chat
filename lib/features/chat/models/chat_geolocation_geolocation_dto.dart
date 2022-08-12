@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:surf_study_jam/surf_study_jam.dart';
 
 /// Data transfer object representing geolocation point.
-class ChatGeolocationDto {
+class ChatGeolocationDto extends Equatable {
   /// Latitude, in degrees.
   final double latitude;
 
@@ -9,7 +10,7 @@ class ChatGeolocationDto {
   final double longitude;
 
   /// Constructor for [ChatGeolocationDto].
-  ChatGeolocationDto({
+  const ChatGeolocationDto({
     required this.latitude,
     required this.longitude,
   });
@@ -19,8 +20,12 @@ class ChatGeolocationDto {
       : latitude = geopoint[0],
         longitude = geopoint[1];
   @override
-  String toString() => 'ChatGeolocationDto(latitude: $latitude, longitude: $longitude)';
+  String toString() =>
+      'ChatGeolocationDto(latitude: $latitude, longitude: $longitude)';
 
   /// Transforms dto to `List`.
   List<double> toGeopoint() => [latitude, longitude];
+
+  @override
+  List<Object?> get props => [latitude, longitude];
 }

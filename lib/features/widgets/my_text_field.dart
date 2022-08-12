@@ -14,6 +14,7 @@ class MyTextField extends StatefulWidget {
   final bool obscureText;
   final bool enableSuggestions;
   final bool autocorrect;
+  final int maxLines;
   const MyTextField({
     Key? key,
     this.textStyle = const TextStyle(
@@ -30,6 +31,7 @@ class MyTextField extends StatefulWidget {
     this.obscureText = false,
     this.enableSuggestions = true,
     this.autocorrect = true,
+    this.maxLines = 1,
   }) : super(key: key);
 
   @override
@@ -71,6 +73,8 @@ class _MyTextFieldState extends State<MyTextField> {
       obscureText: widget.obscureText,
       enableSuggestions: widget.enableSuggestions,
       autocorrect: widget.autocorrect,
+      maxLines: widget.maxLines,
+      minLines: 1,
       decoration: InputDecoration(
         labelText: widget.labelText,
         suffixIcon: Row(

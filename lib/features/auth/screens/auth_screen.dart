@@ -5,15 +5,18 @@ import 'package:surf_practice_chat_flutter/assets/themes/theme_config.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_bloc.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_event.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_state.dart';
+import 'package:surf_practice_chat_flutter/bloc/chat/chat_bloc.dart';
+import 'package:surf_practice_chat_flutter/bloc/chat/chat_event.dart';
 import 'package:surf_practice_chat_flutter/features/auth/models/token_dto.dart';
 import 'package:surf_practice_chat_flutter/features/auth/repository/auth_repository.dart';
-import 'package:surf_practice_chat_flutter/features/auth/screens/widgets/loading_banner.dart';
-import 'package:surf_practice_chat_flutter/features/auth/screens/widgets/show_password_button.dart';
+import 'package:surf_practice_chat_flutter/features/auth/widgets/loading_banner.dart';
+import 'package:surf_practice_chat_flutter/features/auth/widgets/show_password_button.dart';
 import 'package:surf_practice_chat_flutter/features/chat/repository/chat_repository.dart';
 import 'package:surf_practice_chat_flutter/features/chat/screens/chat_screen.dart';
 import 'package:surf_practice_chat_flutter/features/models/snack_type.dart';
 import 'package:surf_practice_chat_flutter/features/widgets/my_text_field.dart';
-import 'package:surf_practice_chat_flutter/utils/get_nav_bar.dart';
+import 'package:surf_practice_chat_flutter/utils/animated_swtich_page.dart';
+import 'package:surf_practice_chat_flutter/utils/snack_bar.dart';
 import 'package:surf_study_jam/surf_study_jam.dart';
 
 /// Screen for authorization process.
@@ -67,7 +70,7 @@ class _AuthScreenState extends State<AuthScreen> {
           listenWhen: (previous, current) {
             if (previous is NotAuthorizedState &&
                 current is NotAuthorizedState) {
-              return previous.authErrors != current.authErrors;
+              return previous.authError == null && current.authError != null;
             }
             return previous.runtimeType != current.runtimeType;
           },
@@ -75,7 +78,7 @@ class _AuthScreenState extends State<AuthScreen> {
             if (authState is NotAuthorizedState) {
               showGetSnackBar(
                 context,
-                authState.authErrors.last.message,
+                authState.authError!.message,
                 from: SnackPosition.TOP,
                 type: SnackType.error,
                 textColor: Colors.red,
@@ -109,7 +112,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                         const SizedBox(height: 36.0),
                         Text(
-                          'Wellcome Back!',
+                          'Chat App',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.headline1,
                         ),
@@ -198,10 +201,10 @@ class _AuthScreenState extends State<AuthScreen> {
                     }
                     authState as NotAuthorizedState;
                     return AnimatedPositioned(
-                      top: authState.authorizationInProgress
-                          ? 0.0
-                          : -screenSize.height,
-                      duration: const Duration(milliseconds: 800),
+                      left: authState.authorizationInProgress
+                          ? ThemeConfig.defaultPadding
+                          : -screenSize.width,
+                      duration: const Duration(milliseconds: 500),
                       child: const LoadingBanner(),
                     );
                   },
@@ -215,17 +218,18 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void _pushToChat(BuildContext context, TokenDto token) {
-    Navigator.pushReplacement(
+    animatedSwitchPage(
       context,
-      MaterialPageRoute(
-        builder: (_) {
-          return ChatScreen(
-            chatRepository: ChatRepository(
-              StudyJamClient().getAuthorizedClient(token.token),
-            ),
-          );
-        },
+      BlocProvider(
+        create: (context) => ChatBloc(
+          chatRepository: ChatRepository(
+            StudyJamClient().getAuthorizedClient(token.token),
+          ),
+        )..add(UpdateMessagesEvent()),
+        child: const ChatScreen(),
       ),
+      routeAnimation: RouteAnimation.slideLeft,
+      clearNavigator: true,
     );
   }
 }

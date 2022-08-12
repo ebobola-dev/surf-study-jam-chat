@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+@immutable
 abstract class AuthEvent {}
 
 class ChangeLoginTextEvent extends AuthEvent {

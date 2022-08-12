@@ -22,5 +22,5 @@ class ThemeConfig {
   };
 
   static const font = 'Inter';
-  static const defaultPadding = 24.0;
+  static const defaultPadding = 12.0;
 }

@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_event.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_state.dart';
 import 'package:surf_practice_chat_flutter/features/auth/exceptions/auth_exception.dart';
 import 'package:surf_practice_chat_flutter/features/auth/repository/auth_repository.dart';
+import 'package:surf_study_jam/surf_study_jam.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
@@ -44,18 +47,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         //? return, if request is already started
         return;
       }
-      emit(state_.copyWith(authorizationInProgress: true));
+      emit(state_.copyWith(
+        authorizationInProgress: true,
+        authError: null,
+        changeError: true,
+      ));
       try {
         final token = await authRepository.signIn(
           login: state_.loginTextInput,
           password: state_.passwordTextInput,
         );
-        emit(AuthorizedState(token: token));
+        final me =
+            await StudyJamClient().getAuthorizedClient(token.token).getUser();
+        emit(AuthorizedState(
+          token: token,
+          me: me,
+        ));
       } on AuthException catch (authError) {
-        final List<AuthException> newErrorsList = List.from(state_.authErrors)
-          ..add(authError);
+        log('Bloc: error on update messages: $authError');
         emit(state_.copyWith(
-          authErrors: newErrorsList,
+          authError: authError,
+          changeError: true,
           authorizationInProgress: false,
         ));
       }
