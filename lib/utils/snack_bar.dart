@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:surf_practice_chat_flutter/assets/themes/theme_config.dart';
 import 'package:surf_practice_chat_flutter/features/models/snack_type.dart';
@@ -32,15 +33,36 @@ void showGetSnackBar(
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(
-            message,
-            style: TextStyle(
-              color: textColor ??
-                  Theme.of(context).snackBarTheme.contentTextStyle!.color,
-              fontSize: fontSize ??
-                  Theme.of(context).snackBarTheme.contentTextStyle!.fontSize,
-            ),
-            textAlign: onButtonTap != null ? TextAlign.left : TextAlign.center,
+          child: Row(
+            children: [
+              if ([SnackType.error, SnackType.warning].contains(type)) ...[
+                SvgPicture.asset(
+                  type == SnackType.error
+                      ? 'assets/icons/error.svg'
+                      : 'assets/icons/warning.svg',
+                  height: 32,
+                  width: 32,
+                  color: ThemeConfig.snackColors[type],
+                ),
+                const SizedBox(width: 12),
+              ],
+              Flexible(
+                child: Text(
+                  message,
+                  style: TextStyle(
+                    color: textColor ??
+                        Theme.of(context).snackBarTheme.contentTextStyle!.color,
+                    fontSize: fontSize ??
+                        Theme.of(context)
+                            .snackBarTheme
+                            .contentTextStyle!
+                            .fontSize,
+                  ),
+                  textAlign:
+                      onButtonTap != null ? TextAlign.left : TextAlign.center,
+                ),
+              ),
+            ],
           ),
         ),
         Container(

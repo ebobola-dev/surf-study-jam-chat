@@ -102,7 +102,7 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
       snackBarTheme: SnackBarThemeData(
         backgroundColor: ThemeConfig.snackColors[SnackType.simple]!,
         contentTextStyle: const TextStyle(
-          fontSize: 18.0,
+          fontSize: 16.0,
           fontFamily: ThemeConfig.font,
           color: ThemeConfig.textColor1,
         ),

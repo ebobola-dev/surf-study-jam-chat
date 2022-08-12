@@ -46,67 +46,69 @@ class _AttachDialogState extends State<AttachDialog> {
     return AnimatedDialog(
       content: SizedBox(
         width: dialogWidth,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _Button(
-              onTap: _attachPhotos,
-              text: 'Прикрепить фото',
-              svgPath: 'assets/icons/attach-file.svg',
-              disable: !widget.chatState.canAttachImage,
-            ),
-            const SizedBox(height: 12),
-            _Button(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => CarouselImagesDialog(
-                    imageUrls: widget.chatState.attachedImages,
-                  ),
-                );
-              },
-              text: 'Посмотреть все фото($imagesCount)',
-              svgPath: 'assets/icons/list.svg',
-              disable: !widget.chatState.imagesAttached,
-            ),
-            const SizedBox(height: 12),
-            _Button(
-              onTap: () {
-                widget.onDetachAllImages();
-                Navigator.pop(context);
-              },
-              text: 'Удалить всё фото($imagesCount)',
-              svgPath: 'assets/icons/detach-file.svg',
-              disable: !widget.chatState.imagesAttached,
-            ),
-            const SizedBox(height: 12),
-            _Button(
-              onTap: _attachGeo,
-              text: 'Прикрепить геолокацию',
-              svgPath: 'assets/icons/attach-location.svg',
-            ),
-            const SizedBox(height: 12),
-            _Button(
-              onTap: () {
-                widget.onDetachGeo();
-                Navigator.pop(context);
-              },
-              text: 'Удалить геолокацию',
-              svgPath: 'assets/icons/detach-location.svg',
-              disable: !widget.chatState.geoAttached,
-            ),
-            const SizedBox(height: 12),
-            _Button(
-              onTap: () {
-                widget.onDetachAll();
-                Navigator.pop(context);
-              },
-              text: 'Удалить всё',
-              svgPath: 'assets/icons/disable.svg',
-              disable: widget.chatState.attachedCount == 0,
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _Button(
+                onTap: _attachPhotos,
+                text: 'Прикрепить фото',
+                svgPath: 'assets/icons/attach-file.svg',
+                disable: !widget.chatState.canAttachImage,
+              ),
+              const SizedBox(height: 12),
+              _Button(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => CarouselImagesDialog(
+                      imageUrls: widget.chatState.attachedImages,
+                    ),
+                  );
+                },
+                text: 'Посмотреть все фото($imagesCount)',
+                svgPath: 'assets/icons/list.svg',
+                disable: !widget.chatState.imagesAttached,
+              ),
+              const SizedBox(height: 12),
+              _Button(
+                onTap: () {
+                  widget.onDetachAllImages();
+                  Navigator.pop(context);
+                },
+                text: 'Удалить всё фото($imagesCount)',
+                svgPath: 'assets/icons/detach-file.svg',
+                disable: !widget.chatState.imagesAttached,
+              ),
+              const SizedBox(height: 12),
+              _Button(
+                onTap: _attachGeo,
+                text: 'Прикрепить геолокацию',
+                svgPath: 'assets/icons/attach-location.svg',
+              ),
+              const SizedBox(height: 12),
+              _Button(
+                onTap: () {
+                  widget.onDetachGeo();
+                  Navigator.pop(context);
+                },
+                text: 'Удалить геолокацию',
+                svgPath: 'assets/icons/detach-location.svg',
+                disable: !widget.chatState.geoAttached,
+              ),
+              const SizedBox(height: 12),
+              _Button(
+                onTap: () {
+                  widget.onDetachAll();
+                  Navigator.pop(context);
+                },
+                text: 'Удалить всё',
+                svgPath: 'assets/icons/disable.svg',
+                disable: widget.chatState.attachedCount == 0,
+              ),
+            ],
+          ),
         ),
       ),
     );

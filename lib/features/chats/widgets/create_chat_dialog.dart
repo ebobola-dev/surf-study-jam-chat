@@ -47,49 +47,51 @@ class _CreateChatDialogState extends State<CreateChatDialog> {
       ],
       content: SizedBox(
         width: screenWidth * .75,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Создайте чат!',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            const SizedBox(height: 12),
-            MyTextField(
-              controller: _nameController,
-              labelText: 'Придумайте название',
-              errorText: _showWarning ? 'Название чата обязательно' : null,
-              maxLines: 1,
-              onSubmitted: (_) {
-                FocusScope.of(context).requestFocus(_descriptionFocusNode);
-              },
-              onChanged: (newText) {
-                if (newText.isNotEmpty && _showWarning) {
-                  setState(() {
-                    _showWarning = false;
-                  });
-                }
-              },
-            ),
-            const SizedBox(height: 12),
-            MyTextField(
-              controller: _descriptionController,
-              focusNode: _descriptionFocusNode,
-              labelText: 'Придумайте описание',
-              maxLines: 5,
-              onSubmitted: (_) {
-                FocusScope.of(context).requestFocus(_avatarFocusNode);
-              },
-            ),
-            const SizedBox(height: 12),
-            MyTextField(
-              controller: _avatarController,
-              focusNode: _avatarFocusNode,
-              labelText: 'Ссылка на фото для аватара чата',
-              maxLines: 1,
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Создайте чат!',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              const SizedBox(height: 12),
+              MyTextField(
+                controller: _nameController,
+                labelText: 'Придумайте название',
+                errorText: _showWarning ? 'Название чата обязательно' : null,
+                maxLines: 1,
+                onSubmitted: (_) {
+                  FocusScope.of(context).requestFocus(_descriptionFocusNode);
+                },
+                onChanged: (newText) {
+                  if (newText.isNotEmpty && _showWarning) {
+                    setState(() {
+                      _showWarning = false;
+                    });
+                  }
+                },
+              ),
+              const SizedBox(height: 12),
+              MyTextField(
+                controller: _descriptionController,
+                focusNode: _descriptionFocusNode,
+                labelText: 'Придумайте описание',
+                maxLines: 5,
+                onSubmitted: (_) {
+                  FocusScope.of(context).requestFocus(_avatarFocusNode);
+                },
+              ),
+              const SizedBox(height: 12),
+              MyTextField(
+                controller: _avatarController,
+                focusNode: _avatarFocusNode,
+                labelText: 'Ссылка на фото для аватара чата',
+                maxLines: 1,
+              ),
+            ],
+          ),
         ),
       ),
     );

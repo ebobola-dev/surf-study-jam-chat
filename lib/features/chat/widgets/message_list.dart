@@ -8,6 +8,7 @@ import 'package:surf_practice_chat_flutter/bloc/chat/chat_bloc.dart';
 import 'package:surf_practice_chat_flutter/bloc/chat/chat_state.dart';
 import 'package:surf_practice_chat_flutter/features/chat/widgets/message_card.dart';
 import 'package:surf_practice_chat_flutter/features/chat/widgets/scroll_down_button.dart';
+import 'package:surf_practice_chat_flutter/utils/smallest_width.dart';
 
 class MessageList extends StatefulWidget {
   const MessageList({Key? key}) : super(key: key);
@@ -53,9 +54,33 @@ class _MessageListState extends State<MessageList> {
     return BlocConsumer<ChatBloc, ChatState>(
       listenWhen: (previous, current) =>
           previous.messagesCount != current.messagesCount,
-      buildWhen: (previous, current) => previous.messages != current.messages,
+      buildWhen: (previous, current) =>
+          previous.messages != current.messages ||
+          previous.updating != current.updating,
       listener: (context, state) => _scrollToEnd(),
       builder: (context, chatState) {
+        if (chatState.messagesCount == 0 && !chatState.updating) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/empty.png',
+                width: getSmallestWidth(context) * .3,
+                color: Theme.of(context).primaryColor,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                "Тут пока пусто...(",
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                "Отправьте первое сообщение!",
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ],
+          );
+        }
         return Stack(
           children: [
             NotificationListener<UserScrollNotification>(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:surf_practice_chat_flutter/assets/themes/theme_config.dart';
 import 'package:surf_practice_chat_flutter/features/chat/widgets/my_network_image.dart';
 import 'package:surf_practice_chat_flutter/features/widgets/animated_dialog.dart';
+import 'package:surf_practice_chat_flutter/utils/smallest_width.dart';
 
 class CarouselImagesDialog extends StatefulWidget {
   final List<String> imageUrls;
@@ -18,9 +19,9 @@ class _CarouselImagesDialogState extends State<CarouselImagesDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth =
-        MediaQuery.of(context).size.width - ThemeConfig.defaultPadding * 2;
-    final dialogWidth = screenWidth * .75;
+    final scmallestWidth =
+        getSmallestWidth(context) - ThemeConfig.defaultPadding * 2;
+    final dialogWidth = scmallestWidth * .75;
     final markWidth = dialogWidth / widget.imageUrls.length - 2;
     return AnimatedDialog(
       content: SizedBox(
@@ -48,7 +49,7 @@ class _CarouselImagesDialogState extends State<CarouselImagesDialog> {
                 (imageUrl) {
                   return MyNetworkImage(
                     url: imageUrl,
-                    placeholderSize: screenWidth * .5,
+                    placeholderSize: scmallestWidth * .5,
                   );
                 },
               ).toList(),

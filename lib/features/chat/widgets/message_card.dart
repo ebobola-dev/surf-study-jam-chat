@@ -86,14 +86,16 @@ class MessageCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Text(
-                          '- ' * 18,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(color: smallTextColor),
-                        ),
-                        const SizedBox(height: 6),
+                        if (message.hasImages || message.hasMessage) ...[
+                          Text(
+                            '- ' * 18,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(color: smallTextColor),
+                          ),
+                          const SizedBox(height: 6),
+                        ],
                       ],
                       if (message.hasImages) ...[
                         GestureDetector(
@@ -119,14 +121,16 @@ class MessageCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 6),
-                        Text(
-                          '- ' * 18,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(color: smallTextColor),
-                        ),
-                        const SizedBox(height: 6),
+                        if (message.hasMessage) ...[
+                          Text(
+                            '- ' * 18,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(color: smallTextColor),
+                          ),
+                          const SizedBox(height: 6),
+                        ],
                       ],
                       if (message.hasMessage) ...[
                         Text(
@@ -139,15 +143,18 @@ class MessageCard extends StatelessWidget {
                       ],
                       Wrap(
                         children: [
-                          Text(
-                            message.hasUserName
-                                ? "${message.chatUserDto.name!}, "
-                                : "",
-                            style:
-                                Theme.of(context).textTheme.headline6!.copyWith(
-                                      color: smallTextColor,
-                                    ),
-                          ),
+                          if (!isOurMessage)
+                            Text(
+                              message.hasUserName
+                                  ? "${message.chatUserDto.name!}, "
+                                  : "",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6!
+                                  .copyWith(
+                                    color: smallTextColor,
+                                  ),
+                            ),
                           Text(
                             message.getStringTime(),
                             style:

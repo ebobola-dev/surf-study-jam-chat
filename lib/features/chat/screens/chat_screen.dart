@@ -20,6 +20,7 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
+        ///* Error listener
         BlocListener<ChatBloc, ChatState>(
           listenWhen: (previous, current) {
             return !previous.isError && current.isError;
@@ -31,6 +32,22 @@ class ChatScreen extends StatelessWidget {
               from: SnackPosition.TOP,
               type: SnackType.error,
               textColor: Colors.red,
+            );
+          },
+        ),
+
+        ///* Attach geo listener
+        BlocListener<ChatBloc, ChatState>(
+          listenWhen: (previous, current) {
+            return !previous.geoAttached && current.geoAttached;
+          },
+          listener: (context, chatState) {
+            showGetSnackBar(
+              context,
+              'Вы прикрепили к сообщению своё местоположение',
+              from: SnackPosition.TOP,
+              type: SnackType.warning,
+              duration: const Duration(seconds: 2),
             );
           },
         ),
