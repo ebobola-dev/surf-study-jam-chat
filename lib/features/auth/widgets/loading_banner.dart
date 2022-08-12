@@ -14,7 +14,7 @@ class LoadingBanner extends StatelessWidget {
 
     return SizedBox(
       width: screenSize.width - ThemeConfig.defaultPadding * 2,
-      height: screenSize.height - ThemeConfig.defaultPadding * 2,
+      height: screenSize.height - ThemeConfig.defaultPadding * 4,
       child: ClipRRect(
         borderRadius: borderRadius,
         child: BackdropFilter(
