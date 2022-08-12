@@ -1,10 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_geolocation_geolocation_dto.dart';
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_message_dto.dart';
+import 'package:surf_practice_chat_flutter/features/chats/models/chat.dart';
 
 class ChatState extends Equatable {
   static const maxImagesCount = 10;
 
+  final Chat chat;
   final bool updating;
   final String? error;
   final String messageField;
@@ -13,6 +15,7 @@ class ChatState extends Equatable {
   final ChatGeolocationDto? attachedGeolocation;
 
   const ChatState({
+    required this.chat,
     this.error,
     this.updating = false,
     this.messageField = '',
@@ -40,6 +43,7 @@ class ChatState extends Equatable {
   @override
   List<Object?> get props => [
         error,
+        chat,
         messages,
         updating,
         messageField,
@@ -58,6 +62,7 @@ class ChatState extends Equatable {
     bool changeAttachedGeolocation = false,
   }) =>
       ChatState(
+        chat: chat,
         messageField: messageField ?? this.messageField,
         messages: messages ?? this.messages,
         updating: updating ?? this.updating,

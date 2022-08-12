@@ -14,6 +14,10 @@ class Chat extends Equatable {
     this.avatar,
   });
 
+  bool get hasName => name != null && name!.isNotEmpty;
+  bool get hasDescription => description != null && description!.isNotEmpty;
+  bool get hasAvatar => avatar != null && avatar!.isNotEmpty;
+
   Chat.fromSJChat({
     required SjChatDto sjChatDto,
   })  : id = sjChatDto.id,

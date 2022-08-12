@@ -52,13 +52,15 @@ class NotAuthorizedState extends AuthState {
 
 class AuthorizedState extends AuthState {
   final TokenDto token;
+  final StudyJamClient authorizedClient;
   final SjUserDto? me;
 
   AuthorizedState({
     required this.token,
+    required this.authorizedClient,
     required this.me,
   });
 
   @override
-  List<Object?> get props => [token, me];
+  List<Object?> get props => [token, me, authorizedClient];
 }

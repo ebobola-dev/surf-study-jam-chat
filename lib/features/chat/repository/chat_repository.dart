@@ -20,7 +20,7 @@ abstract class IChatRepository {
   /// the same name that you specified in [sendMessage].
   ///
   /// Throws an [Exception] when some error appears.
-  Future<Iterable<ChatMessageDto>> getMessages();
+  Future<Iterable<ChatMessageDto>> getMessages(int chatId);
 
   /// Sends the message by with [message] content.
   ///
@@ -31,44 +31,15 @@ abstract class IChatRepository {
   /// [message] mustn't be empty and longer than [maxMessageLength]. Throws an
   /// [InvalidMessageException].
   Future<Iterable<ChatMessageDto>> sendMessage({
+    required int chatId,
     String? message,
     ChatGeolocationDto? location,
     List<String>? imageUrls,
   });
 
-  /// Sends the message by [location] contents. [message] is optional.
-  ///
-  /// Returns actual messages [ChatMessageDto] from a source (given your sent
-  /// [message]). Message with location point returns as
-  /// [ChatMessageGeolocationDto].
-  ///
-  /// Throws an [Exception] when some error appears.
-  ///
-  ///
-  /// If [message] is non-null, content mustn't be empty and longer than
-  /// [maxMessageLength]. Throws an [InvalidMessageException].
-  Future<Iterable<ChatMessageDto>> sendGeolocationMessage({
-    required ChatGeolocationDto location,
-    String? message,
-  });
-
-  //* Added by me
-  Future<Iterable<ChatMessageDto>> sendImagesMessage({
-    required List<String> imageUrls,
-    String? message,
-  });
-  //*
-
-  /// Retrieves chat's user via his [userId].
-  ///
-  ///
-  /// Throws an [UserNotFoundException] if user does not exist.
-  ///
-  /// Throws an [Exception] when some error appears.
   Future<ChatUserDto> getUser(int userId);
 }
 
-/// Simple implementation of [IChatRepository], using [StudyJamClient].
 class ChatRepository implements IChatRepository {
   final StudyJamClient _studyJamClient;
 
@@ -76,14 +47,14 @@ class ChatRepository implements IChatRepository {
   ChatRepository(this._studyJamClient);
 
   @override
-  Future<Iterable<ChatMessageDto>> getMessages() async {
-    final messages = await _fetchAllMessages();
-
+  Future<Iterable<ChatMessageDto>> getMessages(int chatId) async {
+    final messages = await _fetchAllMessages(chatId);
     return messages;
   }
 
   @override
   Future<Iterable<ChatMessageDto>> sendMessage({
+    required int chatId,
     String? message,
     ChatGeolocationDto? location,
     List<String>? imageUrls,
@@ -92,48 +63,13 @@ class ChatRepository implements IChatRepository {
       throw InvalidMessageException('Message "$message" is too large.');
     }
     await _studyJamClient.sendMessage(SjMessageSendsDto(
+      chatId: chatId,
       text: message,
       geopoint: location?.toGeopoint(),
       images: imageUrls,
     ));
 
-    final messages = await _fetchAllMessages();
-
-    return messages;
-  }
-
-  @override
-  Future<Iterable<ChatMessageDto>> sendGeolocationMessage({
-    required ChatGeolocationDto location,
-    String? message,
-  }) async {
-    if (message != null && message.length > IChatRepository.maxMessageLength) {
-      throw InvalidMessageException('Message "$message" is too large.');
-    }
-    await _studyJamClient.sendMessage(SjMessageSendsDto(
-      text: message,
-      geopoint: location.toGeopoint(),
-    ));
-
-    final messages = await _fetchAllMessages();
-
-    return messages;
-  }
-
-  @override
-  Future<Iterable<ChatMessageDto>> sendImagesMessage({
-    required List<String> imageUrls,
-    String? message,
-  }) async {
-    if (message != null && message.length > IChatRepository.maxMessageLength) {
-      throw InvalidMessageException('Message "$message" is too large.');
-    }
-    await _studyJamClient.sendMessage(SjMessageSendsDto(
-      text: message,
-      images: imageUrls,
-    ));
-
-    final messages = await _fetchAllMessages();
+    final messages = await _fetchAllMessages(chatId);
 
     return messages;
   }
@@ -150,7 +86,7 @@ class ChatRepository implements IChatRepository {
         : ChatUserDto.fromSJClient(user);
   }
 
-  Future<Iterable<ChatMessageDto>> _fetchAllMessages() async {
+  Future<Iterable<ChatMessageDto>> _fetchAllMessages(int chatId) async {
     final messages = <SjMessageDto>[];
 
     var isLimitBroken = false;
@@ -162,35 +98,41 @@ class ChatRepository implements IChatRepository {
     // we're doing it in cycle.
     while (!isLimitBroken) {
       final batch = await _studyJamClient.getMessages(
-          lastMessageId: lastMessageId, limit: 10000);
+        chatId: chatId,
+        lastMessageId: lastMessageId,
+        limit: 10000,
+      );
+      //***** Added by me
+      if (batch.isEmpty) break;
+      //*****
       messages.addAll(batch);
       lastMessageId = batch.last.chatId;
       if (batch.length < 10000) {
         isLimitBroken = true;
       }
     }
-
-    // Message ID : User ID
     final messagesWithUsers = <int, int>{};
     for (final message in messages) {
       messagesWithUsers[message.id] = message.userId;
     }
-    final users = await _studyJamClient
-        .getUsers(messagesWithUsers.values.toSet().toList());
+    //***** Added by me
+    final ids = messagesWithUsers.values.toSet().toList();
+    if (ids.isEmpty) return [];
+    //*****
+    final users = await _studyJamClient.getUsers(ids);
     final localUser = await _studyJamClient.getUser();
-
-    return messages
-        .map(
-          (sjMessageDto) => ChatMessageDto.fromSJClient(
-            sjMessageDto: sjMessageDto,
-            sjUserDto: users
-                .firstWhere((userDto) => userDto.id == sjMessageDto.userId),
-            isUserLocal: users
-                    .firstWhere((userDto) => userDto.id == sjMessageDto.userId)
-                    .id ==
-                localUser?.id,
-          ),
-        )
-        .toList();
+    return messages.map(
+      (sjMessageDto) {
+        return ChatMessageDto.fromSJClient(
+          sjMessageDto: sjMessageDto,
+          sjUserDto:
+              users.firstWhere((userDto) => userDto.id == sjMessageDto.userId),
+          isUserLocal: users
+                  .firstWhere((userDto) => userDto.id == sjMessageDto.userId)
+                  .id ==
+              localUser?.id,
+        );
+      },
+    ).toList();
   }
 }

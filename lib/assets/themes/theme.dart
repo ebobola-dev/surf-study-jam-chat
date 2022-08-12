@@ -88,7 +88,7 @@ ThemeData getThemeData(BuildContext context) => ThemeData.light().copyWith(
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: const TextStyle(
           color: Color(0xFFB4B4B4),
-          fontSize: 17.0,
+          fontSize: 14.0,
           fontFamily: ThemeConfig.font,
         ),
         filled: true,

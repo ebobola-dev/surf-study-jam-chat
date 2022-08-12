@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:surf_practice_chat_flutter/bloc/chat/chat_event.dart';
 import 'package:surf_practice_chat_flutter/bloc/chat/chat_state.dart';
 import 'package:surf_practice_chat_flutter/features/chat/repository/chat_repository.dart';
+import 'package:surf_practice_chat_flutter/features/chats/models/chat.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final IChatRepository chatRepository;
-  ChatBloc({required this.chatRepository}) : super(const ChatState()) {
+  ChatBloc({required this.chatRepository, required Chat chat})
+      : super(ChatState(chat: chat)) {
     on<ChangeMessageFieldEvent>((event, emit) {
       emit(state.copyWith(messageField: event.newMessageFieldText));
     });
@@ -72,7 +74,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         changeError: true,
       ));
       try {
-        final messages = await chatRepository.getMessages();
+        final messages = await chatRepository.getMessages(state.chat.id);
         emit(state.copyWith(
           messages: messages,
           updating: false,
@@ -95,6 +97,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       ));
       try {
         final messages = await chatRepository.sendMessage(
+          chatId: state.chat.id,
           message: state.messageField,
           location: state.attachedGeolocation,
           imageUrls: state.imagesAttached ? state.attachedImages : null,

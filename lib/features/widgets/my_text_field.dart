@@ -15,6 +15,7 @@ class MyTextField extends StatefulWidget {
   final bool enableSuggestions;
   final bool autocorrect;
   final int maxLines;
+  final String? errorText;
   const MyTextField({
     Key? key,
     this.textStyle = const TextStyle(
@@ -32,6 +33,7 @@ class MyTextField extends StatefulWidget {
     this.enableSuggestions = true,
     this.autocorrect = true,
     this.maxLines = 1,
+    this.errorText,
   }) : super(key: key);
 
   @override
@@ -77,6 +79,7 @@ class _MyTextFieldState extends State<MyTextField> {
       minLines: 1,
       decoration: InputDecoration(
         labelText: widget.labelText,
+        errorText: widget.errorText,
         suffixIcon: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

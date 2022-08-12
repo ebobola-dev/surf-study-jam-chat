@@ -63,10 +63,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           password: state_.passwordTextInput,
         );
         await _secureStorage.write(key: _secureStorageKey, value: token.token);
-        final me =
-            await StudyJamClient().getAuthorizedClient(token.token).getUser();
+
+        final authorizedClient = StudyJamClient().getAuthorizedClient(
+          token.token,
+        );
+        final me = await authorizedClient.getUser();
         emit(AuthorizedState(
           token: token,
+          authorizedClient: authorizedClient,
           me: me,
         ));
       } on AuthException catch (authError) {
@@ -92,11 +96,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         changeError: true,
       ));
       try {
-        final me = await StudyJamClient()
-            .getAuthorizedClient(event.token.token)
-            .getUser();
+        final authorizedClient = StudyJamClient().getAuthorizedClient(
+          event.token.token,
+        );
+        final me = await authorizedClient.getUser();
         emit(AuthorizedState(
           token: event.token,
+          authorizedClient: authorizedClient,
           me: me,
         ));
       } on AuthException catch (authError) {

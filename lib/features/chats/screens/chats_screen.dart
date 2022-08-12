@@ -4,6 +4,8 @@ import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:surf_practice_chat_flutter/assets/themes/theme_config.dart';
 import 'package:surf_practice_chat_flutter/bloc/chats/chats_bloc.dart';
 import 'package:surf_practice_chat_flutter/bloc/chats/chats_state.dart';
+import 'package:surf_practice_chat_flutter/features/chats/widgets/chat_list.dart';
+import 'package:surf_practice_chat_flutter/features/chats/widgets/header.dart';
 import 'package:surf_practice_chat_flutter/features/models/snack_type.dart';
 import 'package:surf_practice_chat_flutter/utils/snack_bar.dart';
 
@@ -38,24 +40,21 @@ class ChatsScreen extends StatelessWidget {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(kToolbarHeight),
-            child: AppBar(),
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(kToolbarHeight),
+            child: ChatsHeader(),
           ),
           body: Column(
             children: [
               Flexible(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    ThemeConfig.defaultPadding,
-                    0,
-                    ThemeConfig.defaultPadding,
-                    ThemeConfig.defaultPadding,
+                  padding: const EdgeInsets.only(
+                    top: ThemeConfig.defaultPadding,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(child: ListView()),
+                    children: const [
+                      Expanded(child: ChatList()),
                     ],
                   ),
                 ),

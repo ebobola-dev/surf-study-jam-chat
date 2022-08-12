@@ -7,7 +7,6 @@ import 'package:surf_practice_chat_flutter/bloc/auth/auth_event.dart';
 import 'package:surf_practice_chat_flutter/bloc/auth/auth_state.dart';
 import 'package:surf_practice_chat_flutter/bloc/chats/chats_bloc.dart';
 import 'package:surf_practice_chat_flutter/bloc/chats/chats_event.dart';
-import 'package:surf_practice_chat_flutter/features/auth/models/token_dto.dart';
 import 'package:surf_practice_chat_flutter/features/auth/repository/auth_repository.dart';
 import 'package:surf_practice_chat_flutter/features/auth/widgets/loading_banner.dart';
 import 'package:surf_practice_chat_flutter/features/auth/widgets/show_password_button.dart';
@@ -61,7 +60,7 @@ class _AuthScreenState extends State<AuthScreen> {
               previous.runtimeType != current.runtimeType,
           listener: (context, authState) {
             if (authState is AuthorizedState) {
-              _pushToChat(context, authState.token);
+              _pushToChat(context, authState.authorizedClient);
             }
           },
         ),
@@ -217,14 +216,12 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  void _pushToChat(BuildContext context, TokenDto token) {
+  void _pushToChat(BuildContext context, StudyJamClient authorizedClient) {
     animatedSwitchPage(
       context,
       BlocProvider(
         create: (context) => ChatsBloc(
-          chatsRepository: ChatsRepository(
-            StudyJamClient().getAuthorizedClient(token.token),
-          ),
+          chatsRepository: ChatsRepository(authorizedClient),
         )..add(UpdateChatsEvent()),
         child: const ChatsScreen(),
       ),

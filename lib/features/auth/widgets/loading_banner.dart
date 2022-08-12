@@ -35,7 +35,7 @@ class LoadingBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 16.0),
                 Text(
-                  'Пожалуйста, подождите...',
+                  'Авторизация...',
                   style: Theme.of(context).textTheme.headline3,
                 ),
               ],

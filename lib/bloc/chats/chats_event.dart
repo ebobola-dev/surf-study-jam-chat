@@ -7,11 +7,11 @@ class UpdateChatsEvent extends ChatsEvent {}
 
 class CreateChatEvent extends ChatsEvent {
   final String? name;
-  final String? descriprion;
+  final String? description;
   final String? avatar;
   CreateChatEvent({
     this.name,
-    this.descriprion,
+    this.description,
     this.avatar,
   });
 }

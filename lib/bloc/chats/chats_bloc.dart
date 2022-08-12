@@ -37,7 +37,7 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
       try {
         final chats = await chatsRepository.createChat(
           name: event.name,
-          description: event.descriprion,
+          description: event.description,
           avatar: event.avatar,
         );
         emit(state.copyWith(
