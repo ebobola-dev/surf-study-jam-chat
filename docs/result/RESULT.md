@@ -42,11 +42,11 @@
 
 #### Авторизация
 
-![login-screen-1](../assets/screenshots/login-screen-1.jpg = 250x)
+![login-screen-1](../assets/screenshots/login-screen-1.jpg = x250)
 
 На главном экране кнопка войти будет недоступна, пока хотя бы одно из полей пусто
 
-![login-screen-2](../assets/screenshots/login-screen-2.jpg = 250x)
+![login-screen-2](../assets/screenshots/login-screen-2.jpg = x250)
 
 Пароль скрыт по умолчанию, его можно посмотреть нажав на глазик в поле ввода пароля (Глазик виден, только когда поле не пусто)
 
