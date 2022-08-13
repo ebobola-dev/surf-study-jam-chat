@@ -5,15 +5,9 @@ import 'package:surf_practice_chat_flutter/features/chat/models/chat_user_dto.da
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_user_local_dto.dart';
 import 'package:surf_study_jam/surf_study_jam.dart';
 
-/// Data transfer object representing simple chat message.
 class ChatMessageDto extends Equatable {
-  /// Author of message.
   final ChatUserDto chatUserDto;
-
-  /// Chat message string.
   final String? message;
-
-  /// Creation date and createdDateTime.
   final DateTime createdDateTime;
 
   //* Added by me
@@ -27,7 +21,6 @@ class ChatMessageDto extends Equatable {
   bool get hasImages => imageUrls != null && imageUrls!.isNotEmpty;
   //*
 
-  /// Constructor for [ChatMessageDto].
   const ChatMessageDto({
     required this.chatUserDto,
     required this.message,
@@ -36,7 +29,6 @@ class ChatMessageDto extends Equatable {
     this.imageUrls,
   });
 
-  /// Named constructor for converting DTO from [StudyJamClient].
   ChatMessageDto.fromSJClient({
     required SjMessageDto sjMessageDto,
     required SjUserDto sjUserDto,
